@@ -11,10 +11,6 @@ interface Proposition {
   section: string
 }
 
-interface PropositionWithExplanation extends Proposition {
-  brief: string
-  comprehensive: string
-}
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0)

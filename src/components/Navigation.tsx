@@ -29,7 +29,7 @@ export default function Navigation({
     if (!searchTerm) return propositions
 
     const term = searchTerm.toLowerCase()
-    return propositions.filter((prop, index) => {
+    return propositions.filter((prop) => {
       // Search in proposition number
       if (prop.number.includes(searchTerm)) return true
       
