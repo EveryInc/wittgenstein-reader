@@ -16,6 +16,8 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showNavigation, setShowNavigation] = useState(false)
   const longPressTimer = useRef<number | null>(null)
+  const touchStartPos = useRef<{ x: number; y: number } | null>(null)
+  const hasMovedDuringTouch = useRef(false)
   
   const propositions = propositionsData as Proposition[]
   const explanations = explanationsData as Record<string, {brief: string, comprehensive: string}>
@@ -32,18 +34,43 @@ function App() {
   
   const currentProposition = propositionsWithExplanations[currentIndex]
 
-  // Handle long press for navigation
-  const handleLongPressStart = () => {
+  // Handle long press for navigation with better touch detection
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0]
+    touchStartPos.current = { x: touch.clientX, y: touch.clientY }
+    hasMovedDuringTouch.current = false
+    
     longPressTimer.current = window.setTimeout(() => {
-      setShowNavigation(true)
+      if (!hasMovedDuringTouch.current) {
+        setShowNavigation(true)
+      }
     }, 500)
   }
 
-  const handleLongPressEnd = () => {
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartPos.current) return
+    
+    const touch = e.touches[0]
+    const deltaX = Math.abs(touch.clientX - touchStartPos.current.x)
+    const deltaY = Math.abs(touch.clientY - touchStartPos.current.y)
+    
+    // If user moved more than 10 pixels, consider it a scroll
+    if (deltaX > 10 || deltaY > 10) {
+      hasMovedDuringTouch.current = true
+      if (longPressTimer.current) {
+        clearTimeout(longPressTimer.current)
+        longPressTimer.current = null
+      }
+    }
+  }
+
+  const handleTouchEnd = () => {
     if (longPressTimer.current) {
       clearTimeout(longPressTimer.current)
       longPressTimer.current = null
     }
+    touchStartPos.current = null
+    hasMovedDuringTouch.current = false
   }
 
   // Keyboard navigation
@@ -85,11 +112,10 @@ function App() {
       {/* Main Content */}
       <main 
         className="flex-1 flex flex-col overflow-hidden"
-        onTouchStart={handleLongPressStart}
-        onTouchEnd={handleLongPressEnd}
-        onMouseDown={() => !('ontouchstart' in window) && handleLongPressStart()}
-        onMouseUp={() => !('ontouchstart' in window) && handleLongPressEnd()}
-        onMouseLeave={() => !('ontouchstart' in window) && handleLongPressEnd()}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
       >
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col h-full">
           {/* Proposition Number and Navigation */}
@@ -168,7 +194,8 @@ function App() {
 
           {/* Help text */}
           <div className="mt-6 text-center text-sm text-gray-500 flex-shrink-0">
-            <p>Use arrow keys to navigate • Press space or long press for overview</p>
+            <p className="hidden sm:block">Use arrow keys to navigate • Press space or long press for overview</p>
+            <p className="sm:hidden">Swipe to scroll • Long press for overview</p>
           </div>
         </div>
       </main>

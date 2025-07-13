@@ -75,7 +75,7 @@ export default function Navigation({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 400 }}
-            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[85vh] flex flex-col shadow-2xl"
+            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[75vh] sm:max-h-[85vh] flex flex-col shadow-2xl safe-bottom"
           >
             <div className="p-4 border-b border-gray-200">
               <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
@@ -83,14 +83,26 @@ export default function Navigation({
                 <h3 className="text-lg font-semibold">
                   Go to Proposition
                 </h3>
-                <button
-                  onClick={() => setShowSearch(!showSearch)}
-                  className="p-2 text-gray-600 hover:text-gray-900"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowSearch(!showSearch)}
+                    className="p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+                    aria-label="Search"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={handleClose}
+                    className="p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+                    aria-label="Close"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               
               {showSearch && (
@@ -111,7 +123,7 @@ export default function Navigation({
                   No propositions found matching "{searchTerm}"
                 </p>
               ) : (
-                <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2">
                   {filteredIndices.map((originalIndex) => {
                     const prop = propositions[originalIndex]
                     return (
@@ -122,10 +134,10 @@ export default function Navigation({
                           handleClose()
                         }}
                         className={`
-                          p-3 rounded-lg text-sm font-medium transition-colors
+                          py-3 px-2 rounded-lg text-sm font-medium transition-all
                           ${originalIndex === currentIndex 
-                            ? 'bg-blue-500 text-white' 
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            ? 'bg-blue-500 text-white shadow-md transform scale-105' 
+                            : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
                           }
                         `}
                       >
