@@ -65,7 +65,7 @@ export default function Navigation({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="fixed inset-0 bg-black bg-opacity-40 z-40"
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
             onClick={handleClose}
           />
           
@@ -76,6 +76,8 @@ export default function Navigation({
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 500 }}
             className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 max-h-[70vh] sm:max-h-[80vh] flex flex-col shadow-xl safe-bottom border-t border-gray-100"
+            style={{ backgroundColor: 'white' }}
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Handle */}
             <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-3 mb-1" />
