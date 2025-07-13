@@ -16,6 +16,7 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showNavigation, setShowNavigation] = useState(false)
   const forceTouchTriggered = useRef(false)
+  const mainContentRef = useRef<HTMLElement>(null)
   
   const propositions = propositionsData as Proposition[]
   const explanations = explanationsData as Record<string, {brief: string, comprehensive: string}>
@@ -57,6 +58,26 @@ function App() {
     forceTouchTriggered.current = false
   }
 
+  // Handle mobile tap navigation
+  const handleContentClick = (e: React.MouseEvent<HTMLElement>) => {
+    // Only on mobile devices
+    if (window.innerWidth >= 640) return // sm breakpoint
+    
+    const rect = mainContentRef.current?.getBoundingClientRect()
+    if (!rect) return
+    
+    const clickX = e.clientX - rect.left
+    const width = rect.width
+    const leftThird = width * 0.3
+    const rightThird = width * 0.7
+    
+    if (clickX < leftThird && currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1)
+    } else if (clickX > rightThird && currentIndex < propositions.length - 1) {
+      setCurrentIndex(currentIndex + 1)
+    }
+  }
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -95,11 +116,13 @@ function App() {
 
       {/* Main Content */}
       <main 
+        ref={mainContentRef}
         className="flex-1 flex flex-col overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchEnd}
+        onClick={handleContentClick}
       >
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col h-full">
           {/* Proposition Number and Navigation */}
@@ -179,7 +202,7 @@ function App() {
           {/* Help text */}
           <div className="mt-6 text-center text-sm text-gray-500 flex-shrink-0">
             <p className="hidden sm:block">Use arrow keys to navigate • Press space for proposition list</p>
-            <p className="sm:hidden">Force touch for proposition list or tap counter above</p>
+            <p className="sm:hidden">Tap left/right edges to navigate • Force touch for proposition list</p>
           </div>
         </div>
       </main>
