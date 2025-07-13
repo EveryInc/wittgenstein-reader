@@ -21,6 +21,29 @@ function App() {
   const propositions = propositionsData as Proposition[]
   const explanations = explanationsData as Record<string, {brief: string, comprehensive: string}>
   
+  // Initialize from URL on mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const propNumber = urlParams.get('prop')
+    
+    if (propNumber) {
+      const index = propositions.findIndex(p => p.number === propNumber)
+      if (index !== -1) {
+        setCurrentIndex(index)
+      }
+    }
+  }, [propositions])
+  
+  // Update URL when currentIndex changes
+  useEffect(() => {
+    const currentProp = propositions[currentIndex]
+    if (currentProp) {
+      const url = new URL(window.location.href)
+      url.searchParams.set('prop', currentProp.number)
+      window.history.replaceState({}, '', url.toString())
+    }
+  }, [currentIndex, propositions])
+  
   // Merge explanations into propositions
   const propositionsWithExplanations = propositions.map(prop => {
     const explanation = explanations[prop.number]
