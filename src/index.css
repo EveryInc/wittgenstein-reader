@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    background-color: white;
+    color: rgb(17 24 39);
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: none;
+  }
+  
+  /* Better scrolling on mobile */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@layer components {
+  /* Prose overrides for better readability */
+  .prose {
+    color: rgb(31 41 55);
+  }
+  
+  .prose p {
+    line-height: 1.625;
+  }
+  
+  .prose strong {
+    font-weight: 600;
+    color: rgb(17 24 39);
+  }
+}
+
+@layer utilities {
+  /* Safe area padding for iOS devices */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

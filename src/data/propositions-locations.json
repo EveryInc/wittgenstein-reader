@@ -1,0 +1,72 @@
+[
+  {
+    "number": "1",
+    "startLine": 224,
+    "endLine": 289,
+    "type": "proposition",
+    "notes": "Starts with Latin quote from Augustine, includes footnote translation"
+  },
+  {
+    "number": "2", 
+    "startLine": 290,
+    "endLine": 305,
+    "type": "proposition",
+    "notes": "Describes primitive language-game with builder"
+  },
+  {
+    "number": "3",
+    "startLine": 306,
+    "endLine": 318,
+    "type": "proposition",
+    "notes": "Augustine's system as limited description"
+  },
+  {
+    "number": "4",
+    "startLine": 319,
+    "endLine": 335,
+    "type": "proposition",
+    "notes": "Script analogy"
+  },
+  {
+    "number": "5",
+    "startLine": 336,
+    "endLine": 345,
+    "type": "proposition",
+    "notes": "Dispersing the fog of meaning"
+  },
+  {
+    "number": "6",
+    "startLine": 346,
+    "endLine": 392,
+    "type": "proposition", 
+    "notes": "Ostensive teaching of words"
+  },
+  {
+    "number": "7",
+    "startLine": 393,
+    "endLine": 412,
+    "type": "proposition",
+    "notes": "Introduces term 'language-games'"
+  },
+  {
+    "number": "8",
+    "startLine": 413,
+    "endLine": 426,
+    "type": "proposition",
+    "notes": "Expansion of language with letters and pointing"
+  },
+  {
+    "number": "9",
+    "startLine": 427,
+    "endLine": 450,
+    "type": "proposition",
+    "notes": "Learning numerals and ostensive teaching"
+  },
+  {
+    "number": "10",
+    "startLine": 451,
+    "endLine": 475,
+    "type": "proposition",
+    "notes": "What words signify and their use"
+  }
+]
