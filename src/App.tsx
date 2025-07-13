@@ -148,53 +148,94 @@ function App() {
             </div>
           </div>
 
-          {/* Side by Side Content */}
-          <div className="grid grid-cols-2 gap-4 md:gap-8 flex-1 overflow-hidden">
-            {/* Left: Original Text */}
-            <div className="flex flex-col h-full">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                Original Text
-              </h3>
-              <div className="prose prose-sm md:prose-lg max-w-none overflow-y-auto flex-1 pr-2 md:pr-4">
-                <p className="whitespace-pre-wrap text-gray-800 leading-relaxed">
-                  {currentProposition.text}
-                </p>
+          {/* Content - Side by Side on landscape, explanation-only on mobile portrait */}
+          <div className="flex-1 overflow-hidden">
+            {/* Mobile Portrait: Explanation Only */}
+            <div className="block landscape:hidden">
+              <div className="flex flex-col h-full">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                  Explanation
+                </h3>
+                <div className="overflow-y-auto flex-1 pr-2">
+                  {currentProposition.brief && (
+                    <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                      <p className="text-sm text-gray-800 leading-relaxed">
+                        {currentProposition.brief}
+                      </p>
+                    </div>
+                  )}
+                  {currentProposition.comprehensive && (
+                    <div className="prose prose-sm max-w-none">
+                      <ReactMarkdown
+                        components={{
+                          strong: ({children}) => (
+                            <strong className="font-semibold text-gray-900 block mt-6 mb-2">
+                              {children}
+                            </strong>
+                          ),
+                          p: ({children}) => (
+                            <p className="text-gray-700 leading-relaxed mb-4">
+                              {children}
+                            </p>
+                          ),
+                        }}
+                      >
+                        {currentProposition.comprehensive}
+                      </ReactMarkdown>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Right: Explanation */}
-            <div className="flex flex-col h-full">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                Explanation
-              </h3>
-              <div className="overflow-y-auto flex-1 pr-2 md:pr-4">
-                {currentProposition.brief && (
-                  <div className="mb-4 md:mb-6 p-3 md:p-4 bg-blue-50 rounded-lg border border-blue-100">
-                    <p className="text-sm md:text-base text-gray-800 leading-relaxed">
-                      {currentProposition.brief}
-                    </p>
-                  </div>
-                )}
-                {currentProposition.comprehensive && (
-                  <div className="prose prose-sm md:prose-lg max-w-none">
-                    <ReactMarkdown
-                      components={{
-                        strong: ({children}) => (
-                          <strong className="font-semibold text-gray-900 block mt-6 mb-2">
-                            {children}
-                          </strong>
-                        ),
-                        p: ({children}) => (
-                          <p className="text-gray-700 leading-relaxed mb-4">
-                            {children}
-                          </p>
-                        ),
-                      }}
-                    >
-                      {currentProposition.comprehensive}
-                    </ReactMarkdown>
-                  </div>
-                )}
+            {/* Landscape: Side by Side */}
+            <div className="hidden landscape:grid grid-cols-2 gap-4 md:gap-8 h-full">
+              {/* Left: Original Text */}
+              <div className="flex flex-col h-full">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                  Original Text
+                </h3>
+                <div className="prose prose-sm md:prose-lg max-w-none overflow-y-auto flex-1 pr-2 md:pr-4">
+                  <p className="whitespace-pre-wrap text-gray-800 leading-relaxed">
+                    {currentProposition.text}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right: Explanation */}
+              <div className="flex flex-col h-full">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                  Explanation
+                </h3>
+                <div className="overflow-y-auto flex-1 pr-2 md:pr-4">
+                  {currentProposition.brief && (
+                    <div className="mb-4 md:mb-6 p-3 md:p-4 bg-blue-50 rounded-lg border border-blue-100">
+                      <p className="text-sm md:text-base text-gray-800 leading-relaxed">
+                        {currentProposition.brief}
+                      </p>
+                    </div>
+                  )}
+                  {currentProposition.comprehensive && (
+                    <div className="prose prose-sm md:prose-lg max-w-none">
+                      <ReactMarkdown
+                        components={{
+                          strong: ({children}) => (
+                            <strong className="font-semibold text-gray-900 block mt-6 mb-2">
+                              {children}
+                            </strong>
+                          ),
+                          p: ({children}) => (
+                            <p className="text-gray-700 leading-relaxed mb-4">
+                              {children}
+                            </p>
+                          ),
+                        }}
+                      >
+                        {currentProposition.comprehensive}
+                      </ReactMarkdown>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
