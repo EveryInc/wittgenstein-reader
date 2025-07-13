@@ -15,9 +15,9 @@ interface Proposition {
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showNavigation, setShowNavigation] = useState(false)
+  const forceTouchTriggered = useRef(false)
   const longPressTimer = useRef<number | null>(null)
-  const touchStartPos = useRef<{ x: number; y: number } | null>(null)
-  const hasMovedDuringTouch = useRef(false)
+  const touchMoved = useRef(false)
   
   const propositions = propositionsData as Proposition[]
   const explanations = explanationsData as Record<string, {brief: string, comprehensive: string}>
@@ -34,43 +34,51 @@ function App() {
   
   const currentProposition = propositionsWithExplanations[currentIndex]
 
-  // Handle long press for navigation with better touch detection
+  // Handle force touch for navigation with long press fallback
   const handleTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches[0]
-    touchStartPos.current = { x: touch.clientX, y: touch.clientY }
-    hasMovedDuringTouch.current = false
+    forceTouchTriggered.current = false
+    touchMoved.current = false
     
+    // Start long press timer as fallback for devices without force touch
     longPressTimer.current = window.setTimeout(() => {
-      if (!hasMovedDuringTouch.current) {
+      if (!touchMoved.current && !forceTouchTriggered.current) {
         setShowNavigation(true)
+        if (navigator.vibrate) {
+          navigator.vibrate(50)
+        }
       }
-    }, 500)
+    }, 800) // Longer delay to avoid accidental triggers
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!touchStartPos.current) return
+    touchMoved.current = true
+    
+    if (forceTouchTriggered.current) return
     
     const touch = e.touches[0]
-    const deltaX = Math.abs(touch.clientX - touchStartPos.current.x)
-    const deltaY = Math.abs(touch.clientY - touchStartPos.current.y)
-    
-    // If user moved more than 10 pixels, consider it a scroll
-    if (deltaX > 10 || deltaY > 10) {
-      hasMovedDuringTouch.current = true
+    // Force touch detection - force value is between 0 and 1
+    // Values > 0.5 typically indicate a force touch
+    if (touch.force && touch.force > 0.5) {
+      forceTouchTriggered.current = true
       if (longPressTimer.current) {
         clearTimeout(longPressTimer.current)
         longPressTimer.current = null
+      }
+      setShowNavigation(true)
+      // Add haptic feedback if available
+      if (navigator.vibrate) {
+        navigator.vibrate(50)
       }
     }
   }
 
   const handleTouchEnd = () => {
+    forceTouchTriggered.current = false
+    touchMoved.current = false
     if (longPressTimer.current) {
       clearTimeout(longPressTimer.current)
       longPressTimer.current = null
     }
-    touchStartPos.current = null
-    hasMovedDuringTouch.current = false
   }
 
   // Keyboard navigation
@@ -194,8 +202,8 @@ function App() {
 
           {/* Help text */}
           <div className="mt-6 text-center text-sm text-gray-500 flex-shrink-0">
-            <p className="hidden sm:block">Use arrow keys to navigate • Press space or long press for overview</p>
-            <p className="sm:hidden">Swipe to scroll • Long press for overview</p>
+            <p className="hidden sm:block">Use arrow keys to navigate • Press space for proposition list</p>
+            <p className="sm:hidden">Force touch or tap counter for proposition list</p>
           </div>
         </div>
       </main>
