@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "start": "vite preview",
     "build:scripts": "tsc -p tsconfig.scripts.json",
     "generate:explanations": "npm run build:scripts && mv dist/scripts/generateExplanations.js dist/scripts/generateExplanations.cjs && node dist/scripts/generateExplanations.cjs"
   },
